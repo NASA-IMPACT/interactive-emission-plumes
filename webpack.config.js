@@ -12,6 +12,14 @@ module.exports = {
                 test: /\.css$/, // Use regex to match .css files
                 use: ['style-loader', 'css-loader'], // Loaders to process CSS
             },
+            {
+                test: /\.(png|jpe?g|gif)$/i,
+                use: [
+                  {
+                    loader: 'file-loader',
+                  },
+                ],
+              },
         ],
     },
   plugins: [

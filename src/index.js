@@ -2,7 +2,7 @@
 const mapboxgl = require('mapbox-gl')
 const turf = require('@turf/turf')
 const {createColorbar, displayPropertiesWithD3} = require('./helper')
-
+import mapMarkerIcon from "./marker-sdf.png"
 const VMIN = 0;
 const VMAX = 1500;
 const IDS_ON_MAP = new Set();
@@ -18,6 +18,8 @@ const map = new mapboxgl.Map({
     zoom: 4, // Initial zoom level
   });
 
+map.addControl(new mapboxgl.NavigationControl());
+map.addControl(new mapboxgl.ScaleControl());
 
 
 
@@ -74,9 +76,7 @@ function addRaster(item_ids,outlines, feature) {
       IDS_ON_MAP.add(feature.id);
     }
 
-    if (IDS_ON_MAP.size === 1) {
-      createColorbar(VMIN, VMAX);
-    }
+ 
 
 
     if (map.getZoom() < 12) {
@@ -102,11 +102,11 @@ async function main () {
     const methan_metadata = await (await fetch("./data/methane_metadata.json")).json()
     const  methane_stac_metadata = await (await fetch("./data/methane_stac_metadata.json")).json()
 
-    // while ( !map.loaded()) {
-    //     console.log("not loaded")
-    // }
 
     map.on('load', () => {
+    createColorbar(VMIN, VMAX);
+
+
 
 
     var features = methan_metadata.features;
@@ -121,7 +121,7 @@ async function main () {
     var points = features.filter((f) => f.geometry.type === 'Point').map((f, i) => ({ id: i, feature: f }));
       
       
-
+    
     // Filter and set IDs for points
     const centers = features
       .filter((f) => f.geometry.type === "Point")
@@ -167,13 +167,14 @@ async function main () {
 
     
 
-    map.loadImage('./marker-sdf.png', function (error, image) {
+    map.loadImage(mapMarkerIcon, function (error, image) {
         if (error) throw error;
     
         // Add the SDF-enabled marker icon to the map's image assets
         map.addImage('sdf-marker', image, { sdf: true });
     
         points.forEach(function (point) {
+            
             map.addSource('point-source-' + point.id, {
                 type: 'geojson',
                 data: point.feature,
@@ -190,10 +191,50 @@ async function main () {
                 },
                 paint: {
                     'icon-color': '#2370a2', // Set the marker color to blue (#0000FF)
-                },
+                }
             });
+
+
         });
-    });    
+    });  
+
+    $(function () {
+        var point_1 = points[0].feature.properties["UTC Time Observed"]
+        var point_2 = points[points.length - 1].feature.properties["UTC Time Observed"]
+
+        $("#slider-range").slider({
+            range: true,
+            min: new Date(point_1).getTime() / 1000,
+            max: new Date(point_2).getTime() / 1000,
+            step: 86400,
+            values: [new Date(point_1).getTime() / 1000, new Date(point_2).getTime() / 1000],
+            slide: function (event, ui) {
+                let start_date = new Date(ui.values[0] * 1000)
+                let stop_date = new Date(ui.values[1] * 1000)
+                for (const point of points) {
+                    let layerID = 'point-layer-' + point.id
+                    let point_date = new Date(point.feature.properties["UTC Time Observed"])
+                    map.setLayoutProperty(
+                    layerID,
+                    'visibility',
+                    point_date >= start_date && point_date <= stop_date  ? 'visible' : 'none'
+                    );
+                    }
+                $("#amount").val(start_date.toDateString() + " - " + stop_date.toDateString());
+            }
+        });
+        var start_date = new Date($("#slider-range").slider("values", 0) * 1000)
+        var stop_date = new Date($("#slider-range").slider("values", 1) * 1000)
+        $("#amount").val(start_date.toDateString() +
+        " - " + stop_date.toDateString());
+       
+    });
+
+
+
+    
+
+
 
 
 
@@ -201,4 +242,9 @@ async function main () {
 
 }
 
+
 main()
+
+
+
+

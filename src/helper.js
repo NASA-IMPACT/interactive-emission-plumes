@@ -7,6 +7,7 @@ function generateScale(min, max, step) {
     for (let i = min; i <= max; i += step) {
         numbers.push(i);
     }
+    numbers[numbers.length -1] += "+"
     return numbers;
 }
 
@@ -51,19 +52,43 @@ function createColorbar(VMIN,VMAX ) {
     colorbar.append("div")
         .attr("class", "colorbar-label")
         .style("text-align", "center") // Center the label
-        .text("Plume Concentration (ppm m)");
+        .style("margin-bottom", "12px") // Adjust margin as needed
+        .html("<strong>Plume Concentration (ppm m)</strong>");
 
     // Add CSS styles to position and style the colorbar
     colorbar.style("position", "absolute")
         .style("top", "60px") // Adjust the top position as needed
         .style("left", "50px") // Adjust the left position as needed
         .style("background-color", "white")
-        .style("border", "1px solid black");
+        .style("border", "1px solid black")
+        .style("padding", "12px");
 
     // Add CSS styles to style horizontal scale labels
     scaleLabelContainer.style("display", "flex")
         .style("justify-content", "space-between")
-        .style("margin-top", "1px"); // Adjust margin as needed
+        .style("margin-bottom", "12px"); // Adjust margin as needed
+
+
+    const dateRangeContainer =  colorbar.append("p")
+    .attr("class", "scale-label-container");
+    dateRangeContainer
+    .append("label")
+    .attr("for", "amount")
+    .text("Date range:");
+    dateRangeContainer
+    .append("input")
+    .attr("type", "text")
+    .attr("id", "amount")
+    .style("border", "0")
+    .style("color", "#f6931f") // Adjust margin as needed
+    .style("font-weight", "bold")
+    .style("size", "100")
+    .style("width", "240px")
+ // Add the label "Plume Concentration (ppm m)" under the scale labels
+    colorbar.append("div")
+    .attr("id", "slider-range")
+
+
 }
 
 
