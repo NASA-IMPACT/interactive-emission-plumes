@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang='en'>
+  <head>
+    <meta charset='utf-8' />
+    <title>Points on a map</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1' />
+    <link
+  href="https://api.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.css"
+  rel="stylesheet"
+/>
+  </head>
+  <body>
+    <div id='map'></div>
+
+    <div class='session' id='sliderbar'>
+        <h2>Hour: <label id='active-hour'>12PM</label></h2>
+        <input id='slider' class='row' type='range' min='0' max='23' step='1' value='12' />
+      </div>
+    <!-- <script src="./index.js">
+
+
+    // Code from the next step will go here.
+
+    </script> -->
+
+    <script src="./dist/bundle.js"></script>
+  </body>
+</html>
