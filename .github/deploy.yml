@@ -1,8 +1,9 @@
 name: Build and Deploy
 on:
   push:
-    branches:
-      - main
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -19,7 +20,7 @@ jobs:
         run: |
           echo ${{ vars.MAP_STYLE }} > .env
           echo ${{ secrets.MAP_ACCESS_TOKEN }} >> .env
-          
+
           npm run production
           cp index.html dist
           cp -r data dist
