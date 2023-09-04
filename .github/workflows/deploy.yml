@@ -5,7 +5,7 @@ on:
   pull_request:
     branches: [ "main" ]
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
     concurrency: ci-${{ github.ref }}
     steps:
@@ -24,9 +24,26 @@ jobs:
           npm run production
           cp index.html dist
           cp -r data dist
-
-      - name: Deploy 🚀
-        uses: JamesIves/github-pages-deploy-action@v4
+          
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v1
         with:
-          branch: main
-          folder: dist
+          path: ./dist
+
+  deploy:
+    needs: build
+    if: github.ref == 'refs/heads/main'
+
+    permissions:
+      pages: write
+      id-token: write
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to GitHub Pages 🚀
+        id: deployment
+        uses: actions/deploy-pages@v1
