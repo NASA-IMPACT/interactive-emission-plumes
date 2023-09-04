@@ -18,13 +18,14 @@ jobs:
       
       - name: Build for production 🔧
         run: |
-          echo ${{ vars.MAP_STYLE }} > .env
-          echo ${{ secrets.MAP_ACCESS_TOKEN }} >> .env
+          echo MAP_STYLE="${{ vars.MAP_STYLE }}"" > .env
+          echo MAP_ACCESS_TOKEN="${{ secrets.MAP_ACCESS_TOKEN }}" >> .env
+          cat .env
           npm i
           npm run production
           cp index.html dist
           cp -r data dist
-          
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:
