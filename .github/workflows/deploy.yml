@@ -20,7 +20,7 @@ jobs:
         run: |
           echo ${{ vars.MAP_STYLE }} > .env
           echo ${{ secrets.MAP_ACCESS_TOKEN }} >> .env
-
+          npm i
           npm run production
           cp index.html dist
           cp -r data dist
