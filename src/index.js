@@ -196,11 +196,14 @@ async function main () {
 
 
         });
-    });  
+    }); 
+    
 
     $(function () {
+        // 
         var point_1 = points[0].feature.properties["UTC Time Observed"]
         var point_2 = points[points.length - 1].feature.properties["UTC Time Observed"]
+        
 
         $("#slider-range").slider({
             range: true,

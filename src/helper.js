@@ -88,7 +88,6 @@ function createColorbar(VMIN,VMAX ) {
     colorbar.append("div")
     .attr("id", "slider-range")
 
-
 }
 
 
