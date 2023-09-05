@@ -57,8 +57,8 @@ function createColorbar(VMIN,VMAX ) {
 
     // Add CSS styles to position and style the colorbar
     colorbar.style("position", "absolute")
-        .style("top", "60px") // Adjust the top position as needed
-        .style("left", "50px") // Adjust the left position as needed
+        .style("bottom", "60px") // Adjust the top position as needed
+        .style("right", "50px") // Adjust the left position as needed
         .style("background-color", "white")
         .style("border", "1px solid black")
         .style("padding", "12px");
@@ -67,9 +67,11 @@ function createColorbar(VMIN,VMAX ) {
     scaleLabelContainer.style("display", "flex")
         .style("justify-content", "space-between")
         .style("margin-bottom", "12px"); // Adjust margin as needed
+    const dateRange = d3.select("body")
+    .append("div")
+    .attr("class", "data-range");
 
-
-    const dateRangeContainer =  colorbar.append("p")
+    const dateRangeContainer =  dateRange.append("p")
     .attr("class", "scale-label-container");
     dateRangeContainer
     .append("label")
@@ -84,9 +86,15 @@ function createColorbar(VMIN,VMAX ) {
     .style("font-weight", "bold")
     .style("size", "100")
     .style("width", "240px")
- // Add the label "Plume Concentration (ppm m)" under the scale labels
-    colorbar.append("div")
+    dateRange.append("div")
     .attr("id", "slider-range")
+
+    dateRange.style("position", "absolute")
+    .style("top", "60px") // Adjust the top position as needed
+    .style("left", "50px") // Adjust the left position as needed
+    .style("background-color", "white")
+    .style("border", "1px solid black")
+    .style("padding", "12px");
 
 }
 
@@ -149,7 +157,7 @@ function displayPropertiesWithD3(properties) {
     display_div.style("position", "absolute")
     .style("top", "8%") // Adjust the top position as needed
     .style("left", "70%") // Adjust the left position as needed
-    .style("background-color", "#2370a2")
+    .style("background-color", "white")
     .style("padding", "12px");
 
 

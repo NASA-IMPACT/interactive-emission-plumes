@@ -18,10 +18,85 @@ const map = new mapboxgl.Map({
     zoom: 4, // Initial zoom level
   });
 
+  class HomeButtonControl {
+    onClick() {
+
+        // Set the map's center and zoom to the desired location
+        map.flyTo({
+            center: [-98, 39], // Replace with the desired latitude and longitude
+            zoom: 4
+        });
+
+    }
+    onAdd(map){
+      this.map = map;
+      this.container = document.createElement('div');
+      this.container.className  = 'mapboxgl-ctrl mapboxgl-ctrl-group';
+      this.container.addEventListener('contextmenu', (e) => e.preventDefault());
+      this.container.addEventListener('click', (e) => this.onClick());
+      this.container.innerHTML =
+      '<div class="tools-box">' +
+      '<button>' +
+      '<span class="mapboxgl-ctrl-icon btn fa fa-home" aria-hidden="true" title="Description"></span>' +
+      '</button>' +
+      '</div>';
+      return this.container;
+    }
+    onRemove(){
+      this.container.parentNode.removeChild(this.container);
+      this.map = undefined;
+    }
+  }
+  let toggled = 1
+
+
+  class LayerButtonControl {
+    onClick() {
+        $("#layer-eye").toggleClass('fa-eye fa-eye-slash');
+        toggled += 1
+
+        // Set the map's center and zoom to the desired location
+       IDS_ON_MAP.forEach(element => {
+        let layerID = 'raster-layer-' + element;
+                
+
+        map.setLayoutProperty(
+            layerID,
+            'visibility',
+            toggled % 2 == 0 ? 'none' : 'visible'
+            );
+
+
+        
+       })
+
+    }
+    onAdd(map){
+      this.map = map;
+      this.container = document.createElement('div');
+      this.container.className  = 'mapboxgl-ctrl mapboxgl-ctrl-group';
+      this.container.addEventListener('contextmenu', (e) => e.preventDefault());
+      this.container.addEventListener('click', (e) => this.onClick());
+      this.container.innerHTML =
+      '<div class="tools-box">' +
+      '<button>' +
+      '<span id="layer-eye" class="mapboxgl-ctrl-icon btn fa fa-eye" aria-hidden="true" title="Description"></span>' +
+      '</button>' +
+      '</div>';
+      return this.container;
+    }
+    onRemove(){
+      this.container.parentNode.removeChild(this.container);
+      this.map = undefined;
+    }
+  }
+
+  
+
+map.addControl(new HomeButtonControl());
 map.addControl(new mapboxgl.NavigationControl());
 map.addControl(new mapboxgl.ScaleControl());
-
-
+map.addControl(new LayerButtonControl());
 
 function addRaster(item_ids,outlines, feature) {
 
@@ -83,7 +158,7 @@ function addRaster(item_ids,outlines, feature) {
 
     map.flyTo({
         center: [props['Longitude of max concentration'], props['Latitude of max concentration']], // Zoom to the marker's coordinates
-        zoom: 12, // Set the zoom level when the marker is clicked
+        zoom: 14, // Set the zoom level when the marker is clicked
         essential: true // This ensures a smooth animation
     });
 
@@ -104,7 +179,15 @@ async function main () {
 
 
     map.on('load', () => {
+
+
+    // When the geolocate control is clicked, set the map's center and zoom
+
+
     createColorbar(VMIN, VMAX);
+
+
+
 
 
 
@@ -136,7 +219,9 @@ async function main () {
         polygon.feature.properties.id = polygon.id;
         polygon.feature.properties.SceneFID = polygon.feature.properties['Scene FID'];
         map.on('click', 'polygon-layer-' + polygon.id, function (e) {
-          addRaster(item_ids,outlines, polygons[e.features[0].properties.id].feature);
+          
+            addRaster(item_ids,outlines, polygons[e.features[0].properties.id].feature);
+
         });
       });
     points.forEach(function (point) {
@@ -156,12 +241,17 @@ async function main () {
   
         map.addLayer({
           id: 'polygon-layer-' + polygon.id,
-          type: 'fill',
+          type: 'line',
           source: 'polygon-source-' + polygon.id,
-          paint: {
-            'fill-color': '#ff0000', // Change the fill color as desired
-            'fill-opacity': 0.5, // Adjust opacity as desired
+
+        layout : {
+            "line-cap": "round",
+            "line-join": "round"
           },
+          paint: {
+            "line-color": "#ff0000",
+            "line-width": 3
+          }
         });
       });
 
@@ -190,7 +280,7 @@ async function main () {
                     'icon-allow-overlap': true, // Allow overlapping markers
                 },
                 paint: {
-                    'icon-color': '#2370a2', // Set the marker color to blue (#0000FF)
+                    'icon-color': '#082A63', // Set the marker color to GHGC blue (#082A63)
                 }
             });
 
