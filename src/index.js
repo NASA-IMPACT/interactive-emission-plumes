@@ -37,7 +37,7 @@ const map = new mapboxgl.Map({
       this.container.innerHTML =
       '<div class="tools-box">' +
       '<button>' +
-      '<span class="mapboxgl-ctrl-icon btn fa fa-home" aria-hidden="true" title="Description"></span>' +
+      '<span class="mapboxgl-ctrl-icon btn fa fa-home" aria-hidden="true" title="Reset To USA"></span>' +
       '</button>' +
       '</div>';
       return this.container;
@@ -283,7 +283,7 @@ async function main () {
                     'icon-allow-overlap': true, // Allow overlapping markers
                 },
                 paint: {
-                    'icon-color': '#082A63', // Set the marker color to GHGC blue (#082A63)
+                    'icon-color': '#A84B65', 
                 }
             });
 

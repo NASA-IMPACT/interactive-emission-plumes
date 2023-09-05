@@ -2,6 +2,8 @@ body {
     margin: 0; 
     padding: 0; 
     
+    font-family: 'Inter', sans-serif;
+    
   }
   #map { 
     position: absolute; 
@@ -25,4 +27,24 @@ body {
     padding-top: 20%;
     background-color: #082A63;
     color: white
+}
+
+.colorbar {
+  border-radius: 10px;
+  font-size: 12px;
+}
+
+.date-range {
+  border-radius: 10px;
+  padding: 12px 20px;
+  font-size: 14px;
+}
+
+#display_props {
+  font-size: 14px;
+  border-radius: 10px;
+  bottom: 7%;
+  left: 50px;
+  background-color: white;
+  padding: "12px";
 }

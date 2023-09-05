@@ -24,13 +24,15 @@ function createColorbar(VMIN,VMAX ) {
 
     colorbar.append("svg")
         .attr("width", 300) // Adjust the width as needed
-        .attr("height", 30) // Adjust the height as needed
+        .attr("height", 12) // Adjust the height as needed
+        .attr("rx", 10 )
         .append("g")
         .selectAll("rect")
         .data(d3.range(VMIN, VMAX, (VMAX - VMIN) / 100)) // Adjust the number of color segments as needed
         .enter().append("rect")
         .attr("height", 20)
         .attr("width", 3) // Adjust the width of each color segment
+        
         .attr("x", (d, i) => i * 3)
         .attr("fill", d => colorScale(d));
 
@@ -60,7 +62,6 @@ function createColorbar(VMIN,VMAX ) {
         .style("bottom", "60px") // Adjust the top position as needed
         .style("right", "50px") // Adjust the left position as needed
         .style("background-color", "white")
-        .style("border", "1px solid black")
         .style("padding", "12px");
 
     // Add CSS styles to style horizontal scale labels
@@ -69,7 +70,7 @@ function createColorbar(VMIN,VMAX ) {
         .style("margin-bottom", "12px"); // Adjust margin as needed
     const dateRange = d3.select("body")
     .append("div")
-    .attr("class", "data-range");
+    .attr("class", "date-range");
 
     const dateRangeContainer =  dateRange.append("p")
     .attr("class", "scale-label-container");
@@ -93,8 +94,6 @@ function createColorbar(VMIN,VMAX ) {
     .style("top", "60px") // Adjust the top position as needed
     .style("left", "50px") // Adjust the left position as needed
     .style("background-color", "white")
-    .style("border", "1px solid black")
-    .style("padding", "12px");
 
 }
 
@@ -158,11 +157,9 @@ function displayPropertiesWithD3(properties) {
 
 
     // Add CSS styles to position and style the display_div
-    display_div.style("position", "absolute")
-    .style("top", "8%") // Adjust the top position as needed
-    .style("left", "70%") // Adjust the left position as needed
-    .style("background-color", "white")
-    .style("padding", "12px");
+    display_div
+    .style("position", "absolute")
+
 
 
 
