@@ -105,10 +105,12 @@ function displayProperties(properties) {
 
     // Create an HTML string to display the properties
     let html = '<div><h2>Feature Properties</h2><ul>';
+    const keys_to_exclude = ["id", "SceneFID", "map_endtime", "Scene FID"]
 
     // Iterate through the properties and create list items
     for (const key in properties) {
-        if (key !== 'style') {
+        if (!(key in keys_to_exclude)) {
+            console.log(key)
             html += `<li><strong>${key}:</strong> ${properties[key]}</li>`;
         }
     }
@@ -125,15 +127,17 @@ function displayPropertiesWithD3(properties) {
 
     // Create an HTML string to display the properties
     let html = '<table>'
+    const keys_to_exclude = ["id", "SceneFID", "map_endtime", "Scene FID", "style"]
 
     // Iterate through the properties and create list items
     for (const key in properties) {
 
-        if (key !== 'style') {
+        console.log(key, keys_to_exclude)
+
+        if (!(keys_to_exclude.includes(key))) {
             value = properties[key]
             if (value.toString().startsWith('https://')) {
                 value = `<a href="${value}">Download file</a>`
-
 
             }
             html += `<tr><td><strong>${key}:</strong></td><td>${value}</td></tr>`;
