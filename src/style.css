@@ -15,7 +15,7 @@ body {
   }
 .ui-widget-header { background: #082A63; }
 
-.mapboxgl-ctrl button .mapboxgl-ctrl-icon {
+.mapboxgl-ctrl  button .mapboxgl-ctrl-icon {
     display: block;
     width: 100%;
     height: 100%;
@@ -23,4 +23,6 @@ body {
     background-position: 50%;
     font-size: 14px;
     padding-top: 20%;
+    background-color: #082A63;
+    color: white
 }

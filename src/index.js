@@ -93,10 +93,13 @@ const map = new mapboxgl.Map({
 
   
 
+
+
+
 map.addControl(new HomeButtonControl());
-map.addControl(new mapboxgl.NavigationControl());
 map.addControl(new mapboxgl.ScaleControl());
 map.addControl(new LayerButtonControl());
+
 
 function addRaster(item_ids,outlines, feature) {
 
