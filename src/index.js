@@ -276,7 +276,7 @@ async function main () {
                 source: 'point-source-' + point.id,
                 layout: {
                     'icon-image': 'sdf-marker', // Use the SDF-enabled marker icon
-                    'icon-size': 0.3, // Adjust the icon size as needed
+                    'icon-size': 0.2, // Adjust the icon size as needed
                     'icon-allow-overlap': true, // Allow overlapping markers
                 },
                 paint: {
