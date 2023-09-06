@@ -37,7 +37,7 @@ function createColorbar(VMIN,VMAX ) {
         .attr("fill", d => colorScale(d));
 
     // Define custom scale labels
-    const scaleLabels = generateScale(VMIN, VMAX, 200);
+    const scaleLabels = generateScale(VMIN, VMAX, 300);
 
     // Create a container for horizontal scale labels
     const scaleLabelContainer = colorbar.append("div")
