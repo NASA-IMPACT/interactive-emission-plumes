@@ -125,7 +125,7 @@ function displayPropertiesWithD3(properties) {
 
 
     // Create an HTML string to display the properties
-    let html = '<table>'
+    let html = '<span id="close" onclick="document.getElementById(\'display_props\').style.display=\'none\'" >x</span><table>'
     const keys_to_exclude = ["id", "SceneFID", "map_endtime", "Scene FID", "style"]
 
     // Iterate through the properties and create list items

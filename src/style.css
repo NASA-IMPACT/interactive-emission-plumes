@@ -5,6 +5,11 @@ body {
     font-family: 'Inter', sans-serif;
     
   }
+
+  #map canvas {
+    cursor: default;
+    }
+
   #map { 
     position: absolute; 
     top: 0; 
@@ -47,4 +52,20 @@ body {
   left: 50px;
   background-color: white;
   padding: "12px";
+}
+
+#close {
+  float:right;
+  display:inline-block;
+  padding:2px 5px;
+  background:#ccc;
+}
+
+#close:hover {
+  float:right;
+  display:inline-block;
+  padding:2px 5px;
+  background:#ccc;
+  color:#fff;
+  cursor: pointer;
 }
