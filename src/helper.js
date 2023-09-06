@@ -28,7 +28,7 @@ function createColorbar(VMIN,VMAX ) {
         .attr("rx", 10 )
         .append("g")
         .selectAll("rect")
-        .data(d3.range(VMIN, VMAX, (VMAX - VMIN) / 100)) // Adjust the number of color segments as needed
+        .data(d3.range(VMIN, VMAX, (VMAX - VMIN) / 300)) // Adjust the number of color segments as needed
         .enter().append("rect")
         .attr("height", 20)
         .attr("width", 3) // Adjust the width of each color segment
