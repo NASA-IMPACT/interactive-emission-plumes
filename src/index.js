@@ -58,13 +58,21 @@ const map = new mapboxgl.Map({
         // Set the map's center and zoom to the desired location
        IDS_ON_MAP.forEach(element => {
         let layerID = 'raster-layer-' + element;
+
+        try {
+          
+        map.setLayoutProperty(
+          layerID,
+          'visibility',
+          toggled % 2 == 0 ? 'none' : 'visible'
+          );
+        } catch (error) {
+          console.log(error);
+        }
+        
+        
                 
 
-        map.setLayoutProperty(
-            layerID,
-            'visibility',
-            toggled % 2 == 0 ? 'none' : 'visible'
-            );
 
 
         
@@ -315,7 +323,12 @@ async function main () {
                     'visibility',
                     point_date >= start_date && point_date <= stop_date  ? 'visible' : 'none'
                     );
+
+                    
                     }
+
+                        // Set the map's center and zoom to the desired location
+  
                 $("#amount").val(start_date.toDateString() + " - " + stop_date.toDateString());
             }
         });

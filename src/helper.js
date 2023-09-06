@@ -28,7 +28,7 @@ function createColorbar(VMIN,VMAX ) {
         .attr("rx", 10 )
         .append("g")
         .selectAll("rect")
-        .data(d3.range(VMIN, VMAX, (VMAX - VMIN) / 200)) // Adjust the number of color segments as needed
+        .data(d3.range(VMIN, VMAX, (VMAX - VMIN) / 100)) // Adjust the number of color segments as needed
         .enter().append("rect")
         .attr("height", 20)
         .attr("width", 3) // Adjust the width of each color segment
@@ -109,7 +109,7 @@ function displayProperties(properties) {
     // Iterate through the properties and create list items
     for (const key in properties) {
         if (!(key in keys_to_exclude)) {
-            console.log(key)
+            
             html += `<li><strong>${key}:</strong> ${properties[key]}</li>`;
         }
     }
@@ -131,7 +131,7 @@ function displayPropertiesWithD3(properties) {
     // Iterate through the properties and create list items
     for (const key in properties) {
 
-        console.log(key, keys_to_exclude)
+        
 
         if (!(keys_to_exclude.includes(key))) {
             value = properties[key]
