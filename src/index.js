@@ -6,6 +6,7 @@ import mapMarkerIcon from "./marker-sdf.png"
 const VMIN = 0;
 const VMAX = 1500;
 const IDS_ON_MAP = new Set();
+const RASTER_IDS_ON_MAP = new Set();
 const MAP_STYLE = process.env.MAP_STYLE;
 const MAP_ACCESS_TOKEN = process.env.MAP_ACCESS_TOKEN
 import './style.css'
@@ -156,6 +157,8 @@ function addRaster(item_ids,outlines, feature) {
             source: 'raster-source-' + feature.id,
             paint: {},
           });
+
+          RASTER_IDS_ON_MAP.add(feature)
         }
       });
 
@@ -323,9 +326,21 @@ async function main () {
                     'visibility',
                     point_date >= start_date && point_date <= stop_date  ? 'visible' : 'none'
                     );
-
-                    
                     }
+
+                for (const feature of RASTER_IDS_ON_MAP) {
+                  let layerID = 'raster-layer-' + feature.id
+                  let point_date = new Date(feature.properties["UTC Time Observed"])
+                  map.setLayoutProperty(
+                  layerID,
+                  'visibility',
+                  point_date >= start_date && point_date <= stop_date  ? 'visible' : 'none'
+                  );
+
+                }
+
+                
+
 
                         // Set the map's center and zoom to the desired location
   
