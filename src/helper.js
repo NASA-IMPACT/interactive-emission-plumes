@@ -98,27 +98,6 @@ function createColorbar(VMIN,VMAX ) {
 }
 
 
-function displayProperties(properties) {
-    // Extract the properties from the feature
-
-
-    // Create an HTML string to display the properties
-    let html = '<div><h2>Feature Properties</h2><ul>';
-    const keys_to_exclude = ["id", "SceneFID", "map_endtime", "Scene FID"]
-
-    // Iterate through the properties and create list items
-    for (const key in properties) {
-        if (!(key in keys_to_exclude)) {
-            
-            html += `<li><strong>${key}:</strong> ${properties[key]}</li>`;
-        }
-    }
-
-    html += '</ul></div>';
-
-   return html
-}
-
 
 function displayPropertiesWithD3(properties) {
         // Create a display_div element
@@ -126,7 +105,7 @@ function displayPropertiesWithD3(properties) {
 
     // Create an HTML string to display the properties
     let html = '<span id="close" onclick="document.getElementById(\'display_props\').style.display=\'none\'" >x</span><table>'
-    const keys_to_exclude = ["id", "SceneFID", "map_endtime", "Scene FID", "style"]
+    const keys_to_exclude = ["id", "SceneFID", "map_endtime", "Scene FID", "style", "plume_complex_count"]
 
     // Iterate through the properties and create list items
     for (const key in properties) {
@@ -170,4 +149,4 @@ function displayPropertiesWithD3(properties) {
 
 
 
-module.exports = {createColorbar: createColorbar, displayProperties: displayProperties, displayPropertiesWithD3: displayPropertiesWithD3};
+module.exports = {createColorbar: createColorbar, displayPropertiesWithD3: displayPropertiesWithD3};
