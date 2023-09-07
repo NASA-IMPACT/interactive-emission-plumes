@@ -97,7 +97,9 @@ function createColorbar(VMIN,VMAX ) {
 
 }
 
-
+const getFilename = function (pathStr) {
+    return pathStr.substring(pathStr.lastIndexOf('/')+1);
+}
 
 function displayPropertiesWithD3(properties) {
         // Create a display_div element
@@ -115,7 +117,7 @@ function displayPropertiesWithD3(properties) {
         if (!(keys_to_exclude.includes(key))) {
             value = properties[key]
             if (value.toString().startsWith('https://')) {
-                value = `<a href="${value}">Download file</a>`
+                value = `<a href="${value}">${getFilename(value)}</a>`
 
             }
             html += `<tr><td><strong>${key}:</strong></td><td>${value}</td></tr>`;
