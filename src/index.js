@@ -135,7 +135,6 @@ function addRaster(item_ids, outlines, feature, polygon_id) {
           paint: {},
         });
         
-        console.log(polygon_id);
         map.moveLayer(polygon_id);
         RASTER_IDS_ON_MAP.add(feature);
       }

@@ -7,7 +7,7 @@ body {
   }
 
   #map canvas {
-    cursor: default;
+    cursor: pointer;
     }
 
   #map { 
