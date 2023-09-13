@@ -147,7 +147,7 @@ function addRaster(item_ids, feature, polygon_id) {
     IDS_ON_MAP.add(feature.id);
   }
 
-  if (map.getZoom() < 12) {
+
     map.flyTo({
       center: [
         props["Longitude of max concentration"],
@@ -158,7 +158,7 @@ function addRaster(item_ids, feature, polygon_id) {
     });
 
     displayPropertiesWithD3(props);
-  }
+
 }
 
 async function main() {
