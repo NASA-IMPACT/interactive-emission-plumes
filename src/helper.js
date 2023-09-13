@@ -136,7 +136,7 @@ function displayPropertiesWithD3(properties) {
 
       value = properties[key];
       if (value.toString().startsWith("https://")) {
-        value = `<a href="${value}">${getFilename(value)}</a>`;
+        value = `<a href="${value}" target="_blank" >${getFilename(value)} </a>`;
       }
       html += `<tr><td><strong>${key}:</strong></td><td>${value}</td></tr>`;
 
