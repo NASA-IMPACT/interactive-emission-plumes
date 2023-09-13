@@ -9,7 +9,9 @@ function generateScale(min, max, step) {
   return numbers;
 }
 
+
 function createColorbar(VMIN, VMAX) {
+
   // Create a color scale using D3
   const colorScale = d3
     .scaleSequential(d3.interpolatePlasma)
@@ -128,11 +130,9 @@ function displayPropertiesWithD3(properties) {
     "plume_complex_count",
   ];
 
-  console.log(new_sorted_properties)
    // Iterate through the properties and create list items
   new_sorted_properties.forEach(key => {
     if (!keys_to_exclude.includes(key)) {
-      console.log(key)
 
       value = properties[key];
       if (value.toString().startsWith("https://")) {
@@ -158,5 +158,5 @@ function displayPropertiesWithD3(properties) {
 
 module.exports = {
   createColorbar: createColorbar,
-  displayPropertiesWithD3: displayPropertiesWithD3,
+  displayPropertiesWithD3: displayPropertiesWithD3
 };

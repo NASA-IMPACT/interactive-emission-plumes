@@ -1,7 +1,6 @@
 const mapboxgl = require("mapbox-gl");
 const turf = require("@turf/turf");
 const { createColorbar, displayPropertiesWithD3 } = require("./helper");
-import mapMarkerIcon from "./marker-sdf.png";
 const VMIN = 0;
 const VMAX = 1500;
 const IDS_ON_MAP = new Set();
@@ -150,7 +149,7 @@ function addRaster(item_ids, outlines, feature, polygon_id) {
         props["Latitude of max concentration"],
       ], // Zoom to the marker's coordinates
       zoom: 14, // Set the zoom level when the marker is clicked
-      essential: true, // This ensures a smooth animation
+      // essential: true, // This ensures a smooth animation
     });
 
     displayPropertiesWithD3(props);
@@ -207,18 +206,18 @@ async function main() {
     //     );
     //   });
     // });
-    points.forEach(function (point) {
-      point.feature.properties.id = point.id;
-      point.feature.properties.SceneFID = point.feature.properties["Scene FID"];
-      map.on("click", "point-layer-" + point.id, function (e) {
-        addRaster(
-          item_ids,
-          outlines,
-          points[e.features[0].properties.id].feature,
-          "polygon-layer-" + point.id
-        );
-      });
-    });
+    // points.forEach(function (point) {
+    //   point.feature.properties.id = point.id;
+    //   point.feature.properties.SceneFID = point.feature.properties["Scene FID"];
+    //   map.on("click", "point-layer-" + point.id, function (e) {
+    //     addRaster(
+    //       item_ids,
+    //       outlines,
+    //       points[e.features[0].properties.id].feature,
+    //       "polygon-layer-" + point.id
+    //     );
+    //   });
+    // });
     // Add your polygons and points as layers to the map
     polygons.forEach(function (polygon) {
       map.addSource("polygon-source-" + polygon.id, {
@@ -242,34 +241,46 @@ async function main() {
       });
     });
 
-    map.loadImage(mapMarkerIcon, function (error, image) {
-      if (error) throw error;
-
-      // Add the SDF-enabled marker icon to the map's image assets
-      map.addImage("sdf-marker", image, { sdf: true });
-
       points.forEach(function (point) {
-        map.addSource("point-source-" + point.id, {
-          type: "geojson",
-          data: point.feature,
-        });
+        // map.addSource("point-source-" + point.id, {
+        //   type: "geojson",
+        //   data: point.feature,
+        // });
 
-        map.addLayer({
-          id: "point-layer-" + point.id,
-          type: "symbol",
-          source: "point-source-" + point.id,
-          layout: {
-            "icon-image": "sdf-marker", // Use the SDF-enabled marker icon
-            "icon-size": 0.2, // Adjust the icon size as needed
-            "icon-allow-overlap": true, // Allow overlapping markers
-          },
-          paint: {
-            "icon-color": "#A84B65",
-            "icon-opacity": 1
-          },
+        // map.addLayer({
+        //   id: "point-layer-" + point.id,
+        //   type: "symbol",
+        //   source: "point-source-" + point.id,
+        //   layout: {
+        //     "icon-image": "sdf-marker", // Use the SDF-enabled marker icon
+        //     "icon-size": 0.2, // Adjust the icon size as needed
+        //   },
+        //   paint: {
+        //     "icon-color": "#A84B65",
+        //     "icon-opacity": 1
+        //   },
+        // });
+
+        
+        let coords = point.feature.geometry.coordinates
+
+        const markerEl = document.createElement("div");
+        markerEl.className = "marker";
+        const marker = new mapboxgl.Marker(markerEl)
+        .setLngLat([coords[0], coords[1]])
+        .addTo(map);
+
+
+        marker.getElement().addEventListener("click", () => {
+          console.log(point)
+          addRaster(
+            item_ids,
+            outlines,
+            point.feature,
+            "polygon-layer-" + point.id
+          );
         });
-      });
-    });
+      })
 
     $(function () {
       //

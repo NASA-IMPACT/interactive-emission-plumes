@@ -7,7 +7,7 @@ body {
   }
 
   #map canvas {
-    cursor: pointer;
+    cursor: default;
     }
 
   #map { 
@@ -68,4 +68,14 @@ body {
   background:#ccc;
   color:#fff;
   cursor: pointer;
+}
+
+.marker {
+  background-image: url("./marker-sdf-2.png");
+  background-size: cover;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  cursor: pointer;
+  /* box-shadow: 1px 1px white; */
 }
