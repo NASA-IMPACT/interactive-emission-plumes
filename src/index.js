@@ -1,5 +1,5 @@
 const mapboxgl = require("mapbox-gl");
-const turf = require("@turf/turf");
+
 const { createColorbar, displayPropertiesWithD3 } = require("./helper");
 const VMIN = 0;
 const VMAX = 1500;
@@ -9,7 +9,9 @@ const MAP_STYLE = process.env.MAP_STYLE;
 const MAP_ACCESS_TOKEN = process.env.MAP_ACCESS_TOKEN;
 import "./style.css";
 mapboxgl.accessToken = MAP_ACCESS_TOKEN;
+const icon_clicker = new Array(2)
 
+var counter_clicks_icon = 0
 const map = new mapboxgl.Map({
   container: "map",
   style: MAP_STYLE, // You can choose any Mapbox style
@@ -90,20 +92,20 @@ map.addControl(new HomeButtonControl());
 map.addControl(new mapboxgl.ScaleControl());
 map.addControl(new LayerButtonControl());
 
-function addRaster(item_ids, outlines, feature, polygon_id) {
+function addRaster(item_ids, feature, polygon_id) {
   var props = feature.properties;
   var collection = "emit-ch4plume-v1";
   var assets = "ch4-plume-emissions";
 
   if (!IDS_ON_MAP.has(feature.id)) {
-    var outlineShape = turf.polygon(outlines[feature.id].geometry.coordinates);
     var subset = item_ids.filter((item) =>
       props["Data Download"].includes(item.id)
     );
 
     subset.forEach(function (item) {
-      var itemShape = turf.polygon(item.geometry.coordinates);
-      if (turf.booleanIntersects(itemShape, outlineShape)) {
+      
+
+
         var TILE_URL =
           "https://ghg.center/api/raster/stac/tiles/WebMercatorQuad/{z}/{x}/{y}@1x" +
           "?collection=" +
@@ -118,13 +120,14 @@ function addRaster(item_ids, outlines, feature, polygon_id) {
           VMAX +
           "&nodata=-9999";
 
-        const bbox = turf.bbox(item.geometry);
+
+        // const bbox = turf.bbox(item.geometry);
 
         map.addSource("raster-source-" + feature.id, {
           type: "raster",
           tiles: [TILE_URL],
           tileSize: 256,
-          bounds: bbox,
+          bounds: item.bbox,
         });
 
         map.addLayer({
@@ -137,7 +140,9 @@ function addRaster(item_ids, outlines, feature, polygon_id) {
         map.moveLayer(polygon_id);
         RASTER_IDS_ON_MAP.add(feature);
       }
-    });
+    );
+
+    
 
     IDS_ON_MAP.add(feature.id);
   }
@@ -170,13 +175,6 @@ async function main() {
     createColorbar(VMIN, VMAX);
 
     var features = methan_metadata.features;
-    // Filter and set IDs for polygons
-    const outlines = features
-      .filter((f) => f.geometry.type === "Polygon")
-      .map((f, i) => {
-        f.id = i;
-        return f;
-      });
     var polygons = features
       .filter((f) => f.geometry.type === "Polygon")
       .map((f, i) => ({ id: i, feature: f }));
@@ -193,31 +191,7 @@ async function main() {
       });
 
     const item_ids = methane_stac_metadata.features.map((feature) => feature);
-    // polygons.forEach(function (polygon) {
-    //   polygon.feature.properties.id = polygon.id;
-    //   polygon.feature.properties.SceneFID =
-    //     polygon.feature.properties["Scene FID"];
-    //   map.on("click", "polygon-layer-" + polygon.id, function (e) {
-    //     addRaster(
-    //       item_ids,
-    //       outlines,
-    //       polygons[e.features[0].properties.id].feature,
-    //       "polygon-layer-" + polygon.id
-    //     );
-    //   });
-    // });
-    // points.forEach(function (point) {
-    //   point.feature.properties.id = point.id;
-    //   point.feature.properties.SceneFID = point.feature.properties["Scene FID"];
-    //   map.on("click", "point-layer-" + point.id, function (e) {
-    //     addRaster(
-    //       item_ids,
-    //       outlines,
-    //       points[e.features[0].properties.id].feature,
-    //       "polygon-layer-" + point.id
-    //     );
-    //   });
-    // });
+
     // Add your polygons and points as layers to the map
     polygons.forEach(function (polygon) {
       map.addSource("polygon-source-" + polygon.id, {
@@ -242,25 +216,6 @@ async function main() {
     });
 
       points.forEach(function (point) {
-        // map.addSource("point-source-" + point.id, {
-        //   type: "geojson",
-        //   data: point.feature,
-        // });
-
-        // map.addLayer({
-        //   id: "point-layer-" + point.id,
-        //   type: "symbol",
-        //   source: "point-source-" + point.id,
-        //   layout: {
-        //     "icon-image": "sdf-marker", // Use the SDF-enabled marker icon
-        //     "icon-size": 0.2, // Adjust the icon size as needed
-        //   },
-        //   paint: {
-        //     "icon-color": "#A84B65",
-        //     "icon-opacity": 1
-        //   },
-        // });
-
         
         let coords = point.feature.geometry.coordinates
 
@@ -271,15 +226,34 @@ async function main() {
         .addTo(map);
 
 
-        marker.getElement().addEventListener("click", () => {
-          console.log(point)
+        marker.getElement().addEventListener("click", (e) => {
+          
+          counter_clicks_icon += 1
+
+          if (counter_clicks_icon % 2 == 0) {
+            icon_clicker[0] = e.target
+            icon_clicker[0].style.visibility = "hidden"
+            if (icon_clicker[1]) {
+              icon_clicker[1].style.visibility = "visible"
+            }
+
+          }
+          else {
+            icon_clicker[1] = e.target
+            icon_clicker[1].style.visibility = "hidden"
+            if (icon_clicker[0]) {
+              icon_clicker[0].style.visibility = "visible"
+            }
+          }
+
           addRaster(
             item_ids,
-            outlines,
             point.feature,
             "polygon-layer-" + point.id
           );
+          
         });
+        
       })
 
     $(function () {
