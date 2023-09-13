@@ -101,30 +101,47 @@ const getFilename = function (pathStr) {
 };
 
 function displayPropertiesWithD3(properties) {
+
+  const important_keys = [
+    "Max Plume Concentration (ppm m)"
+  ]
+
+
+  const combinedList = important_keys.concat(Object.keys(properties));
+
+  const new_sorted_properties = [...new Set(combinedList)];
   // Create a display_div element
 
   // Create an HTML string to display the properties
   let html =
     "<span id=\"close\" onclick=\"document.getElementById('display_props').style.display='none'\" >x</span><table>";
+  
+
   const keys_to_exclude = [
     "id",
     "SceneFID",
     "map_endtime",
-    "Scene FID",
+    "Scene FIDs",
     "style",
+    "DCID",
+    "DAAC Scene Numbers",
     "plume_complex_count",
   ];
 
-  // Iterate through the properties and create list items
-  for (const key in properties) {
+  console.log(new_sorted_properties)
+   // Iterate through the properties and create list items
+  new_sorted_properties.forEach(key => {
     if (!keys_to_exclude.includes(key)) {
+      console.log(key)
+
       value = properties[key];
       if (value.toString().startsWith("https://")) {
         value = `<a href="${value}">${getFilename(value)}</a>`;
       }
       html += `<tr><td><strong>${key}:</strong></td><td>${value}</td></tr>`;
+
     }
-  }
+  })
   html += "</table>";
 
   d3.select("body").select("#display_props").remove();

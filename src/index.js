@@ -93,7 +93,7 @@ map.addControl(new LayerButtonControl());
 
 function addRaster(item_ids, outlines, feature, polygon_id) {
   var props = feature.properties;
-  var collection = "emit-ch4plume-v1-lpdaac";
+  var collection = "emit-ch4plume-v1";
   var assets = "ch4-plume-emissions";
 
   if (!IDS_ON_MAP.has(feature.id)) {
@@ -265,6 +265,7 @@ async function main() {
           },
           paint: {
             "icon-color": "#A84B65",
+            "icon-opacity": 1
           },
         });
       });
