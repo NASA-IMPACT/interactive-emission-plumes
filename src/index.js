@@ -11,6 +11,8 @@ import "./style.css";
 mapboxgl.accessToken = MAP_ACCESS_TOKEN;
 const icon_clicker = new Array(2)
 
+const marker_props = new Object()
+
 var counter_clicks_icon = 0
 const map = new mapboxgl.Map({
   container: "map",
@@ -216,14 +218,39 @@ async function main() {
     });
 
       points.forEach(function (point) {
-        
         let coords = point.feature.geometry.coordinates
-
         const markerEl = document.createElement("div");
         markerEl.className = "marker";
         const marker = new mapboxgl.Marker(markerEl)
         .setLngLat([coords[0], coords[1]])
         .addTo(map);
+
+
+        let local_props = point.feature.properties
+        
+
+        const tooltipContent = `
+        <strong> Max Plume conc: <span style="color: red">${local_props["Max Plume Concentration (ppm m)"]} (ppm m)</span></strong><br>
+        Latitude (max conc): ${coords[0].toFixed(3)}<br>
+        Longitude (max conc: ${coords[1].toFixed(3)}<br>
+        Time Observed: ${local_props["UTC Time Observed"]}
+        `;
+
+
+        const popup = new mapboxgl.Popup().setHTML(tooltipContent);
+        marker.setPopup(popup);
+
+        marker.getElement().addEventListener("mouseenter", () => {
+          popup.addTo(map);
+        });
+  
+        marker.getElement().addEventListener("mouseleave", () => {
+          popup.remove();
+        });
+
+        marker_props["point-layer-" + point.id] = marker
+
+        
 
 
         marker.getElement().addEventListener("click", (e) => {
@@ -272,6 +299,7 @@ async function main() {
           new Date(point_2).getTime() / 1000,
         ],
         slide: function (event, ui) {
+          
           let start_date = new Date(ui.values[0] * 1000);
           let stop_date = new Date(ui.values[1] * 1000);
           for (const point of points) {
@@ -279,13 +307,18 @@ async function main() {
             let point_date = new Date(
               point.feature.properties["UTC Time Observed"]
             );
-            map.setLayoutProperty(
-              layerID,
-              "visibility",
-              point_date >= start_date && point_date <= stop_date
-                ? "visible"
-                : "none"
-            );
+              
+            if (point_date >= start_date && point_date <= stop_date) {
+              marker_props[layerID].addTo(map)
+              
+
+            }
+            else {
+              marker_props[layerID].remove()
+              
+            }
+            
+            
           }
 
           for (const feature of RASTER_IDS_ON_MAP) {
