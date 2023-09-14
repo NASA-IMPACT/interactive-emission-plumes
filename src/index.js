@@ -38,7 +38,7 @@ class HomeButtonControl {
     this.container.innerHTML =
       '<div class="tools-box">' +
       "<button>" +
-      '<span class="mapboxgl-ctrl-icon btn fa fa-home" aria-hidden="true" title="Reset To USA"></span>' +
+      '<span class="mapboxgl-ctrl-icon btn fa fa-refresh" aria-hidden="true" title="Reset To USA"></span>' +
       "</button>" +
       "</div>";
     return this.container;
@@ -91,6 +91,7 @@ class LayerButtonControl {
 }
 
 map.addControl(new HomeButtonControl());
+map.addControl(new mapboxgl.NavigationControl());
 map.addControl(new mapboxgl.ScaleControl());
 map.addControl(new LayerButtonControl());
 
