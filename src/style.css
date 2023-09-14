@@ -52,6 +52,8 @@ body {
   left: 50px;
   background-color: white;
   padding: "12px";
+  height: fit-content;
+  cursor: move;
 }
 
 #close {

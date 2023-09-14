@@ -10,6 +10,44 @@ function generateScale(min, max, step) {
 }
 
 
+function dragElement(elmnt) {
+  var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+
+  elmnt.onmousedown = dragMouseDown;
+
+
+  function dragMouseDown(e) {
+    e = e || window.event;
+    e.preventDefault();
+    // get the mouse cursor position at startup:
+    pos3 = e.clientX;
+    pos4 = e.clientY;
+    document.onmouseup = closeDragElement;
+    // call a function whenever the cursor moves:
+    document.onmousemove = elementDrag;
+  }
+
+  function elementDrag(e) {
+    e = e || window.event;
+    e.preventDefault();
+    // calculate the new cursor position:
+    pos1 = pos3 - e.clientX;
+    pos2 = pos4 - e.clientY;
+    pos3 = e.clientX;
+    pos4 = e.clientY;
+    // set the element's new position:
+    elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+    elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+  }
+
+  function closeDragElement() {
+    // stop moving when mouse button is released:
+    document.onmouseup = null;
+    document.onmousemove = null;
+  }
+}
+
+
 function createColorbar(VMIN, VMAX) {
 
   // Create a color scale using D3
@@ -136,7 +174,7 @@ function displayPropertiesWithD3(properties) {
 
       value = properties[key];
       if (value.toString().startsWith("https://")) {
-        value = `<a href="${value}" target="_blank" >${getFilename(value)} </a>`;
+        value = `<a href="${value}" target="_blank" >${getFilename(value)} <svg width="12" height="12" fill="currentColor" xmlns="http://www.w3.org/2000/svg" role="img" viewBox="0 0 16 16" aria-hidden="true" class="expand-top-right__CollecticonExpandTopRight-sc-1bjhv94-0"><title>expand top right icon</title><path d="M3,5h4V3H1v12h12V9h-2v4H3V5z M16,8V0L8,0v2h4.587L6.294,8.294l1.413,1.413L14,3.413V8H16z"></path></svg></a>`;
       }
       html += `<tr><td><strong>${key}:</strong></td><td>${value}</td></tr>`;
 
@@ -158,5 +196,6 @@ function displayPropertiesWithD3(properties) {
 
 module.exports = {
   createColorbar: createColorbar,
-  displayPropertiesWithD3: displayPropertiesWithD3
+  displayPropertiesWithD3: displayPropertiesWithD3,
+  dragElement: dragElement
 };

@@ -1,6 +1,6 @@
 const mapboxgl = require("mapbox-gl");
 
-const { createColorbar, displayPropertiesWithD3 } = require("./helper");
+const { createColorbar, displayPropertiesWithD3, dragElement } = require("./helper");
 const VMIN = 0;
 const VMAX = 1500;
 const IDS_ON_MAP = new Set();
@@ -160,6 +160,7 @@ function addRaster(item_ids, feature, polygon_id) {
     });
 
     displayPropertiesWithD3(props);
+    dragElement(document.getElementById("display_props"))
 
 }
 
@@ -289,19 +290,28 @@ async function main() {
       var point_2 =
         points[points.length - 1].feature.properties["UTC Time Observed"];
 
+      var min_start_date = new Date(point_1)
+      min_start_date.setUTCHours(0,0,0,0)
+      var max_stop_date = new Date(point_2)
+      max_stop_date.setUTCHours(23,59,59,0)
+
       $("#slider-range").slider({
         range: true,
-        min: new Date(point_1).getTime() / 1000,
-        max: new Date(point_2).getTime() / 1000,
+        min: min_start_date.getTime() / 1000,
+        max: max_stop_date.getTime() / 1000,
         step: 86400,
         values: [
-          new Date(point_1).getTime() / 1000,
-          new Date(point_2).getTime() / 1000,
+          min_start_date.getTime() / 1000,
+          max_stop_date.getTime() / 1000,
         ],
         slide: function (event, ui) {
           
           let start_date = new Date(ui.values[0] * 1000);
           let stop_date = new Date(ui.values[1] * 1000);
+          start_date.setUTCHours(0,0,0,0)
+          stop_date.setUTCHours(23,59,59,0)
+
+
           for (const point of points) {
             let layerID = "point-layer-" + point.id;
             let point_date = new Date(
@@ -333,17 +343,15 @@ async function main() {
             );
           }
 
-          // Set the map's center and zoom to the desired location
-
           $("#amount").val(
-            start_date.toDateString() + " - " + stop_date.toDateString()
+            start_date.toUTCString().slice(0, -13) + " - " + stop_date.toUTCString().slice(0, -13)
           );
         },
       });
       var start_date = new Date($("#slider-range").slider("values", 0) * 1000);
       var stop_date = new Date($("#slider-range").slider("values", 1) * 1000);
       $("#amount").val(
-        start_date.toDateString() + " - " + stop_date.toDateString()
+        start_date.toUTCString().slice(0, -13) + " - " + stop_date.toUTCString().slice(0, -13)
       );
     });
   });
