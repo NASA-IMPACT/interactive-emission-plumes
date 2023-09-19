@@ -232,7 +232,7 @@ async function main() {
         
 
         const tooltipContent = `
-        <strong> Max Methane Enh (ppm m): <span style="color: red">${local_props["Max Plume Concentration (ppm m)"]} (ppm m)</span></strong><br>
+        <strong> Max Methane Enh: <span style="color: red">${local_props["Max Plume Concentration (ppm m)"]} (ppm m)</span></strong><br>
         Latitude (max conc): ${coords[1].toFixed(3)}<br>
         Longitude (max conc): ${coords[0].toFixed(3)}<br>
         Time Observed: ${local_props["UTC Time Observed"]}
