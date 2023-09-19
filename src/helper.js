@@ -91,13 +91,13 @@ function createColorbar(VMIN, VMAX) {
     .attr("class", "colorbar-scale-label-horizontal")
     .text((d) => d); // Set the label text
 
-  // Add the label "Plume Concentration (ppm m)" under the scale labels
+  // Add the label "Methane enhancement (ppm m)" under the scale labels
   colorbar
     .append("div")
     .attr("class", "colorbar-label")
     .style("text-align", "center") // Center the label
     .style("margin-bottom", "12px") // Adjust margin as needed
-    .html("<strong>Plume Concentration (ppm m)</strong>");
+    .html("<strong>Methane enhancement (ppm m)</strong>");
 
   // Add CSS styles to position and style the colorbar
   colorbar
