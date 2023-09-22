@@ -28,6 +28,8 @@ class HomeButtonControl {
       center: [-98, 39], // Replace with the desired latitude and longitude
       zoom: 4,
     });
+    $("#display_props").css({"visibility": "hidden"});
+
   }
   onAdd(map) {
     this.map = map;
