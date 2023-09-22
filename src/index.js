@@ -117,7 +117,7 @@ function addRaster(item_ids, feature, polygon_id) {
           item.id +
           "&assets=" +
           assets +
-          "&resampling=bilinear&bidx=1&colormap_name=plasma&rescale=" +
+          "&bidx=1&colormap_name=plasma&rescale=" +
           VMIN +
           "%2C" +
           VMAX +
