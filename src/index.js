@@ -219,6 +219,8 @@ async function main() {
       });
     });
 
+
+
       points.forEach(function (point) {
         let coords = point.feature.geometry.coordinates
         const markerEl = document.createElement("div");
@@ -314,7 +316,9 @@ async function main() {
 
 
           for (const point of points) {
+            let polygone_visiblity = 'visible'
             let layerID = "point-layer-" + point.id;
+            let polygonID = "polygon-layer-" + point.id
             let point_date = new Date(
               point.feature.properties["UTC Time Observed"]
             );
@@ -326,11 +330,18 @@ async function main() {
             }
             else {
               marker_props[layerID].remove()
+              polygone_visiblity = 'none'
               
             }
+            map.setLayoutProperty(
+              polygonID,
+              "visibility",
+              polygone_visiblity
+            );
             
             
           }
+
 
           for (const feature of RASTER_IDS_ON_MAP) {
             let layerID = "raster-layer-" + feature.id;
@@ -338,7 +349,7 @@ async function main() {
             map.setLayoutProperty(
               layerID,
               "visibility",
-              point_date >= start_date && point_date <= stop_date
+              toggled % 2 != 0 && point_date >= start_date && point_date <= stop_date
                 ? "visible"
                 : "none"
             );
