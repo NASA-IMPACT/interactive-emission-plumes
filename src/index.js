@@ -56,15 +56,26 @@ class LayerButtonControl {
     toggled += 1;
 
     // Set the map's center and zoom to the desired location
-    IDS_ON_MAP.forEach((element) => {
-      let layerID = "raster-layer-" + element;
+    RASTER_IDS_ON_MAP.forEach((element) => {
+
+
+
 
       try {
+        let layerID = "raster-layer-" + element.id;
+        let layer_date = new Date(element.properties["UTC Time Observed"]);
+        var start_date = new Date($("#slider-range").slider("values", 0) * 1000)
+        var stop_date = new Date($("#slider-range").slider("values", 1) * 1000)
+        let bool_display = toggled % 2 != 0 && layer_date >= start_date && layer_date <= stop_date;
         map.setLayoutProperty(
           layerID,
           "visibility",
-          toggled % 2 == 0 ? "none" : "visible"
+          bool_display
+            ? "visible"
+            : "none"
         );
+        $("#display_props").css({"visibility": bool_display? "visible" : "hidden"});
+
       } catch (error) {
         console.log(error);
       }
@@ -346,13 +357,17 @@ async function main() {
           for (const feature of RASTER_IDS_ON_MAP) {
             let layerID = "raster-layer-" + feature.id;
             let point_date = new Date(feature.properties["UTC Time Observed"]);
+            let bool_display = toggled % 2 != 0 && point_date >= start_date && point_date <= stop_date;
             map.setLayoutProperty(
               layerID,
               "visibility",
-              toggled % 2 != 0 && point_date >= start_date && point_date <= stop_date
+              bool_display
                 ? "visible"
                 : "none"
             );
+            $("#display_props").css({"visibility": bool_display? "visible" : "hidden"});
+
+            
           }
 
           $("#amount").val(
