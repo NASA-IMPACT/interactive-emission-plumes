@@ -102,3 +102,12 @@ button.mapboxgl-ctrl-zoom-out .mapboxgl-ctrl-icon {
 .mapboxgl-ctrl-compass {
   display: none !important;
 }
+
+
+.ui-slider .ui-slider-handle {
+  position: absolute;
+  z-index: 2;
+  width: 1.2em;
+  height: 1.2em;
+  cursor: col-resize;
+}
