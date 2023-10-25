@@ -304,7 +304,9 @@ async function main() {
       //
       var point_1 = points[0].feature.properties["UTC Time Observed"];
       var point_2 =
-        points[points.length - 1].feature.properties["UTC Time Observed"];
+        points[718-1].feature.properties["UTC Time Observed"];
+      //TODO: sort and get min, max
+      //console.log(`this first ${point_1} last ${point_2}`)
 
       var min_start_date = new Date(point_1)
       min_start_date.setUTCHours(0,0,0,0)
