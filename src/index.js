@@ -195,10 +195,15 @@ async function main() {
     var polygons = features
       .filter((f) => f.geometry.type === "Polygon")
       .map((f, i) => ({ id: i, feature: f }));
-    var points = features
+    const points = features
       .filter((f) => f.geometry.type === "Point")
-      .map((f, i) => ({ id: i, feature: f }));
-
+      .map((f, i) => ({ id: i, feature: f }))
+      .sort((prev, next) => {
+        const prev_date = new Date(prev.feature.properties["UTC Time Observed"]).getTime();
+        const next_date = new Date(next.feature.properties["UTC Time Observed"]).getTime();
+        return prev_date - next_date
+        
+      });
     // Filter and set IDs for points
     const centers = features
       .filter((f) => f.geometry.type === "Point")
@@ -302,15 +307,13 @@ async function main() {
 
     $(function () {
       //
-      var point_1 = points[0].feature.properties["UTC Time Observed"];
-      var point_2 =
-        points[718-1].feature.properties["UTC Time Observed"];
-      //TODO: sort and get min, max
-      //console.log(`this first ${point_1} last ${point_2}`)
 
-      var min_start_date = new Date(point_1)
+      var first_point = points[0].feature.properties["UTC Time Observed"];
+      var last_point = points[points.length - 1].feature.properties["UTC Time Observed"];
+
+      var min_start_date = new Date(first_point)
       min_start_date.setUTCHours(0,0,0,0)
-      var max_stop_date = new Date(point_2)
+      var max_stop_date = new Date(last_point)
       max_stop_date.setUTCHours(23,59,59,0)
 
       $("#slider-range").slider({
