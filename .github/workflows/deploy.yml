@@ -15,7 +15,7 @@ jobs:
 
       - uses: actions/setup-node@v3
         with:
-          node-version: 'v16.19.0'
+          node-version: 'v20.9.0'
       - name: Update Data 📊
         run: |
           node update_data.js
