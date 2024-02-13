@@ -8,6 +8,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     concurrency: ci-${{ github.ref }}
+
     steps:
       - name: Checkout 🛎️
         uses: actions/checkout@v3
@@ -17,19 +18,12 @@ jobs:
           node-version: 'v16.19.0'
       - name: Update Data 📊
         run: |
-          echo MAP_STYLE="${{ vars.MAP_STYLE }}" > .env
-          echo MAP_ACCESS_TOKEN="${{ secrets.MAP_ACCESS_TOKEN }}" >> .env
-          cat .env
-          npm i
-          npm run production
-          cp index.html dist
-          cp -r data dist
+          node update-data.js
       
       - name: Build for production 🔧
         run: |
           echo MAP_STYLE="${{ vars.MAP_STYLE }}" > .env
           echo MAP_ACCESS_TOKEN="${{ secrets.MAP_ACCESS_TOKEN }}" >> .env
-          cat .env
           npm i
           npm run production
           cp index.html dist
