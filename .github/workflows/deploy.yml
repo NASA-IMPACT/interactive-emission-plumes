@@ -18,7 +18,7 @@ jobs:
           node-version: 'v16.19.0'
       - name: Update Data 📊
         run: |
-          node update-data.js
+          node update_data.js
       
       - name: Build for production 🔧
         run: |
