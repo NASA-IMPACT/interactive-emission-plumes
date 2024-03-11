@@ -210,9 +210,6 @@ async function main() {
   ).json();
 
   map.on("load", () => {
-    // When the geolocate control is clicked, set the map's center and zoom
-    console.log("In the load")
-
     createColorbar(VMIN, VMAX);
 
     var features = methan_metadata.features;

@@ -1,4 +1,5 @@
 const Dotenv = require('dotenv-webpack');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
 module.exports = {
     entry: './src/index.js',
@@ -22,5 +23,12 @@ module.exports = {
   plugins: [
     // Load environment variables from the .env file
     new Dotenv(),
+    new HtmlWebpackPlugin({
+      inject: false,
+      template: './index.html',
+
+      // Pass the full url with the key!
+      publicUrl: process.env.PUBLIC_URL,
+    })
   ],
 };
