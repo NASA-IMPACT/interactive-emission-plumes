@@ -1,53 +1,53 @@
-name: Build and Deploy
-on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    concurrency: ci-${{ github.ref }}
+# name: Build and Deploy
+# on:
+#   push:
+#     branches: [ "main" ]
+#   pull_request:
+#     branches: [ "main" ]
+# jobs:
+#   build:
+#     runs-on: ubuntu-latest
+#     concurrency: ci-${{ github.ref }}
 
-    steps:
-      - name: Checkout 🛎️
-        uses: actions/checkout@v3
+#     steps:
+#       - name: Checkout 🛎️
+#         uses: actions/checkout@v3
 
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 'v20.9.0'
-      - name: Update Data 📊
-        run: |
-          node update_data.js
+#       - uses: actions/setup-node@v3
+#         with:
+#           node-version: 'v20.9.0'
+#       - name: Update Data 📊
+#         run: |
+#           node update_data.js
       
-      - name: Build for production 🔧
-        run: |
-          echo MAP_STYLE="${{ vars.MAP_STYLE }}" > .env
-          echo MAP_ACCESS_TOKEN="${{ secrets.MAP_ACCESS_TOKEN }}" >> .env
-          npm i
-          npm run production
-          cp index.html dist
-          cp -r data dist
+#       - name: Build for production 🔧
+#         run: |
+#           echo MAP_STYLE="${{ vars.MAP_STYLE }}" > .env
+#           echo MAP_ACCESS_TOKEN="${{ secrets.MAP_ACCESS_TOKEN }}" >> .env
+#           npm i
+#           npm run production
+#           cp index.html dist
+#           cp -r data dist
 
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v1
-        with:
-          path: ./dist
+#       - name: Upload artifact
+#         uses: actions/upload-pages-artifact@v1
+#         with:
+#           path: ./dist
 
-  deploy:
-    needs: build
-    if: github.ref == 'refs/heads/main'
+#   deploy:
+#     needs: build
+#     if: github.ref == 'refs/heads/main'
 
-    permissions:
-      pages: write
-      id-token: write
+#     permissions:
+#       pages: write
+#       id-token: write
 
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+#     environment:
+#       name: github-pages
+#       url: ${{ steps.deployment.outputs.page_url }}
 
-    runs-on: ubuntu-latest
-    steps:
-      - name: Deploy to GitHub Pages 🚀
-        id: deployment
-        uses: actions/deploy-pages@v1
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Deploy to GitHub Pages 🚀
+#         id: deployment
+#         uses: actions/deploy-pages@v1
